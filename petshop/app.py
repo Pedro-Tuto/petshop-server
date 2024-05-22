@@ -2,7 +2,6 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from petshop.users.views import router as user_router
-
 from petshop.config import Settings, settings
 from petshop.database import create_db_and_tables
 # from petshop.public import api as public_api
