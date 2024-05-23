@@ -16,3 +16,8 @@ def post_user(user_create: UserCreate, db: Session = Depends(get_session)):
 def get_user(id: int, db: Session = Depends(get_session)):
 
     return read_user(id, db) 
+
+@router.delete('/{id}')
+def delete_user(id: int, db: Session = Depends(get_session)):
+
+    remove_user(id, db)

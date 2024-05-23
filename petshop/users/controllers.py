@@ -16,10 +16,16 @@ def create_user(user_create: UserCreate, db: Session) -> User:
 def read_user(id: int, db: Session) -> User:
 
     user = db.get(User, id)
-    if not user:
+    if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"User com id {id} não encontrado.",
         )
 
     return user
+
+def remove_user(id: int, db: Session):
+
+    user_to_delete = read_user(id, db)
+    db.delete(user_to_delete)
+    db.commit()
