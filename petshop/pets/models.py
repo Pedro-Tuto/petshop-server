@@ -1,9 +1,10 @@
 from sqlmodel import Field, SQLModel
+from datetime import date
 
 class PetBase(SQLModel):
-    nome: str
-    idade: int
-    raça: str
+    name: str
+    date_of_birth: date
+    breed: str
 
 class Pet(PetBase, table=True):
     id: int | None = Field(default=None, primary_key=True)

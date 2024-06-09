@@ -1,31 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException
-from typing import List
+from fastapi import APIRouter, Depends
 from sqlmodel import Session
-from petshop.pets.models import Pet, PetCreate, PetRead
-from petshop.pets.crud import PetCRUD
+from petshop.pets.controllers import create_pet, read_pet, remove_pet
 from petshop.database import get_session
+from petshop.pets.models import PetCreate, PetRead
 
 router = APIRouter()
-crud = PetCRUD()
 
-@router.post("/", response_model=PetRead)
-def create_pet(pet: PetCreate, db: Session = Depends(get_session)):
-    return crud.create_pet(Pet(**pet.dict()))
+@router.post("", response_model=PetRead)
+def post_pet(pet_create: PetCreate, db: Session = Depends(get_session)):
+    return create_pet(pet_create, db)
 
+@router.get("/{id}", response_model=PetRead)
+def get_pet(id: int, db: Session = Depends(get_session)):
+    return read_pet(id, db)
 
-
-@router.get("/{pet_id}", response_model=PetRead)
-def read_pet(pet_id: int, db: Session = Depends(get_session)):
-    pet = crud.read_pet(pet_id)
-    if pet is None:
-        raise HTTPException(status_code=404, detail="Pet com o id {id} não encontrado")
-    return pet
-
-
-
-@router.delete("/{pet_id}", response_model=bool)
-def delete_pet(pet_id: int, db: Session = Depends(get_session)):
-    success = crud.delete_pet(pet_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Pet com o id {id} não encontrado")
-    return success
+@router.delete("/{id}")
+def delete_pet(id: int, db: Session = Depends(get_session)):
+    remove_pet(id, db)
