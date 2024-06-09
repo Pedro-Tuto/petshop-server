@@ -1,9 +1,7 @@
 import os
 import secrets
 from typing import Literal
-
 from pydantic_settings import BaseSettings
-
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = f"SQLModel API - {os.getenv('ENV', 'development').capitalize()}"
@@ -18,13 +16,10 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
 
-
 settings = Settings()
-
 
 class TestSettings(Settings):
     class Config:
         case_sensitive = True
-
 
 test_settings = TestSettings()
