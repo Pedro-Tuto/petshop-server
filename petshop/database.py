@@ -1,5 +1,6 @@
 from sqlmodel import Session, SQLModel, create_engine
 from petshop.config import settings
+from petshop.pets.models import Pet
 
 connect_args = {"check_same_thread": False}
 engine = create_engine(settings.DATABASE_URI, echo=True, connect_args=connect_args)

@@ -1,8 +1,10 @@
-from fastapi import APIRouter, Depends
+import select
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
-from petshop.pets.controllers import create_pet, read_pet, remove_pet
+from petshop.pets.controllers import create_pet, read_pet, remove_pet, list_pets
 from petshop.database import get_session
-from petshop.pets.models import PetCreate, PetRead
+from petshop.pets.models import Pet, PetCreate, PetRead
+from typing import List
 
 router = APIRouter()
 
@@ -17,3 +19,7 @@ def get_pet(id: int, db: Session = Depends(get_session)):
 @router.delete("/{id}")
 def delete_pet(id: int, db: Session = Depends(get_session)):
     remove_pet(id, db)
+
+@router.get("/", response_model=List[PetRead])
+def get_pets(db: Session = Depends(get_session)):
+    return list_pets(db)

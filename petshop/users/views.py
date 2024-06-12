@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends
-from sqlmodel import Session
-from petshop.users.controllers import create_user, read_user, remove_user
+from sqlmodel import Session, select
+from petshop.users.controllers import create_user, read_user, remove_user, list_users
 from petshop.database import get_session
-from petshop.users.models import UserCreate, UserRead
+from petshop.users.models import User, UserCreate, UserRead
+from typing import List
 
 router = APIRouter()
 
@@ -17,3 +18,8 @@ def get_user(id: int, db: Session = Depends(get_session)):
 @router.delete("/{id}")
 def delete_user(id: int, db: Session = Depends(get_session)):
     remove_user(id, db)
+
+@router.get("/", response_model=List[UserRead])
+def list_users(db: Session = Depends(get_session)):
+    users = db.exec(select(User)).all()
+    return users
