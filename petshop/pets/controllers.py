@@ -5,15 +5,18 @@ from typing import List
 from petshop.users.models import User
 
 def create_pet(pet_create: PetCreate, db: Session) -> Pet:
-    pet = Pet.from_orm(pet_create)
-    if pet_create.owner_id:
-        owner = db.get(User, pet_create.owner_id)
-        if owner is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Owner not found")
-        pet.owner = owner
+    pet = Pet.model_validate(pet_create)
+    # if pet_create.owner_id:
+    #     owner = db.get(User, pet_create.owner_id)
+    #     if owner is None:
+    #         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Owner not found")
+    #     pet.owner = owner
+    print("3A2FA3 ------------------------------------------------------------------------")
+    print(pet)
     db.add(pet)
     db.commit()
     db.refresh(pet)
+    print(pet)
     return pet
 
 def read_pet(id: int, db: Session) -> Pet:
@@ -31,5 +34,6 @@ def remove_pet(id: int, db: Session):
     db.commit()
 
 def list_pets(db: Session) -> List[Pet]:
-    pets = db.exec(select(Pet)).all()
+    pets = db.exec(select(Pet).join(User)).all()
+    print(pets)
     return pets

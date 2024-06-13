@@ -20,6 +20,6 @@ def get_pet(id: int, db: Session = Depends(get_session)):
 def delete_pet(id: int, db: Session = Depends(get_session)):
     remove_pet(id, db)
 
-@router.get("/", response_model=List[PetRead])
+@router.get("/", response_model=list[PetRead])
 def get_pets(db: Session = Depends(get_session)):
     return list_pets(db)
