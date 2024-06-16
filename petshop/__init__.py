@@ -20,6 +20,8 @@ def create_app(settings: Settings):
     )
     app.include_router(user_router, prefix="/users")
     app.include_router(pet_router, prefix="/pets")
+    app.openapi_version = "3.0.3"
+
     return app
 
 app = create_app(settings)
