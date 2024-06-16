@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from sqlmodel import Session, select
-from petshop.users.models import User, UserCreate
+from petshop.users.models import User, UserCreate, UserUpdate
 from typing import List
 
 def create_user(user_create: UserCreate, db: Session) -> User:
@@ -27,3 +27,16 @@ def remove_user(id: int, db: Session):
 def list_users(db: Session) -> List[User]:
     users = db.exec(select(User)).all()
     return users
+
+
+def update_user(id: int, user_update: UserUpdate, db: Session) -> User:
+    user = read_user(id, db)
+    print(user)
+    user_data = user_update.model_dump(exclude_unset=True)
+    print(user_data)
+    user.sqlmodel_update(user_data)
+    print(user)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user

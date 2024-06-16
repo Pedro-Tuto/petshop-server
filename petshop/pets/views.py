@@ -6,6 +6,9 @@ from petshop.database import get_session
 from petshop.pets.models import Pet, PetCreate, PetRead
 from typing import List
 
+from petshop.users.controllers import update_user
+from petshop.users.models import UserRead, UserUpdate
+
 router = APIRouter()
 
 @router.post("", response_model=PetRead)
@@ -23,3 +26,4 @@ def delete_pet(id: int, db: Session = Depends(get_session)):
 @router.get("/", response_model=list[PetRead])
 def get_pets(db: Session = Depends(get_session)):
     return list_pets(db)
+

@@ -20,3 +20,10 @@ class UserRead(UserBase):
 
 class UserCreate(UserBase):
     password: str
+
+
+class UserUpdate(SQLModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
